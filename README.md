@@ -9,12 +9,12 @@ Demonstration of functioning of four legged robot for modeling project for cours
 ### Demo Steps
 
 Install Anaconda, for installation step see [Link](https://docs.anaconda.com/anaconda/install/)
-'''
+```
 conda create -n modeling python=3.6
 conda activate modeling
 pip install pybullet
 python LeggedRobot.py
-'''
+```
 
 ### Copyright
 
