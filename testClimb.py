@@ -2,11 +2,10 @@ import pybullet as p1
 from pybullet_utils import bullet_client
 import pybullet_data
 from pybullet_utils import pd_controller_stable
-
+import climb
 import time
 import motion_capture_data
 import quadrupedPoseInterpolator
-import climb
 
 useKinematic = False
 useConstraints = True
@@ -22,8 +21,8 @@ p.setTimeStep(timeStep)
 # urdfFlags = p.URDF_USE_SELF_COLLISION+p.URDF_USE_SELF_COLLISION_EXCLUDE_ALL_PARENTS
 urdfFlags = p.URDF_USE_SELF_COLLISION
 
-startPos = [0.007058990464444105, 0.03149299192130908, 0.4918981912395484]
-startOrn = [0.005934649695708604, 0.7065453990917289, 0.7076373820553712, -0.0027774940359030264]
+startPos = [0.007714045256424385, 2.4832953726079623, 0.47220767977764067]
+startOrn = [-0.015613979977597187, 0.7128507268398393, 0.7009593948969438, -0.01599911181542653]
 quadruped = p.loadURDF("ModelData/LeggedRobot.urdf",
                        startPos,
                        startOrn,
@@ -130,6 +129,16 @@ stablePD = pd_controller_stable.PDControllerStable(p)
 cycleTime = mocapData.getCycleTime()
 
 
+
+
+
+
+climb.stepUp1(p, timeStep, maxForceId, quadruped, jointIds, jointDirections, jointOffsets)
+climb.moveForward1(p, timeStep, maxForceId, quadruped, jointIds, jointDirections, jointOffsets)
+
+
+########################################################################################################################
+
 t = 0
 count = 0
 while t < 9. * cycleTime:
@@ -229,10 +238,14 @@ while t < 9. * cycleTime:
     t += timeStep
     time.sleep(timeStep)
 
-climb.stepUp1(p,timeStep,maxForceId,quadruped,jointIds,jointDirections,jointOffsets)
 
-pos, ori = p.getBasePositionAndOrientation(quadruped)
-print(pos, ori)
+########################################################################################################################
+
+
+p.setRealTimeSimulation(1)
+
+
+
 for j in range(p.getNumJoints(quadruped)):
     p.changeDynamics(quadruped, j, linearDamping=0, angularDamping=0)
     info = p.getJointInfo(quadruped, j)
@@ -245,10 +258,7 @@ for j in range(p.getNumJoints(quadruped)):
             p.addUserDebugParameter(jointName.decode("utf-8"), -4, 4,
                                     (js[0] - jointOffsets[j]) / jointDirections[j]))
 
-p.setRealTimeSimulation(1)
-
 while (1):
-
     for i in range(len(paramIds)):
         c = paramIds[i]
         targetPos = p.readUserDebugParameter(c)

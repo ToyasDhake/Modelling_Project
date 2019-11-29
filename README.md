@@ -5,6 +5,10 @@
 ## Overview
 
 Demonstration of functioning of four legged robot for modeling project for course ENPM662 Introduction to Robot Modeling.
+### Dependencies
+
+- python 3.6 
+- pybullet
 
 ### Demo Steps
 
@@ -13,6 +17,7 @@ Install Anaconda, for installation step see [Link](https://docs.anaconda.com/ana
 conda create -n modeling python=3.6
 conda activate modeling
 pip install pybullet
+cd <project_directory>
 python LeggedRobot.py
 ```
 
