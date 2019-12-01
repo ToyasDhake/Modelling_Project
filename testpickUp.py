@@ -2,10 +2,11 @@ import pybullet as p1
 from pybullet_utils import bullet_client
 import pybullet_data
 from pybullet_utils import pd_controller_stable
-import movements
+
 import time
 import motion_capture_data
 import quadrupedPoseInterpolator
+import movements
 
 useKinematic = False
 useConstraints = True
@@ -21,14 +22,16 @@ p.setTimeStep(timeStep)
 # urdfFlags = p.URDF_USE_SELF_COLLISION+p.URDF_USE_SELF_COLLISION_EXCLUDE_ALL_PARENTS
 urdfFlags = p.URDF_USE_SELF_COLLISION
 
-startPos = [0.007714045256424385, 2.4832953726079623, 0.47220767977764067]
-startOrn = [-0.015613979977597187, 0.7128507268398393, 0.7009593948969438, -0.01599911181542653]
+startPos = [0.007058990464444105, 0.03149299192130908, 0.4918981912395484]
+startOrn = [0.005934649695708604, 0.7065453990917289, 0.7076373820553712, -0.0027774940359030264]
 quadruped = p.loadURDF("ModelData/LeggedRobot.urdf",
                        startPos,
                        startOrn,
                        flags=urdfFlags,
                        useFixedBase=False)
 obstacle = p.loadURDF("ModelData/obstacle.urdf", useFixedBase=True)
+
+dumbell = p.loadURDF("ModelData/squareDumbell.urdf", [-1,0,0.5], [0.707, 0, 0.707, 0])
 p.resetBasePositionAndOrientation(quadruped, startPos, startOrn)
 if not useConstraints:
     for j in range(p.getNumJoints(quadruped)):
@@ -129,130 +132,9 @@ stablePD = pd_controller_stable.PDControllerStable(p)
 cycleTime = mocapData.getCycleTime()
 
 
-
-
-
-
-movements.stepUp1(p, timeStep, maxForceId, quadruped, jointIds, jointDirections, jointOffsets)
-movements.moveForward1(p, timeStep, maxForceId, quadruped, jointIds, jointDirections, jointOffsets)
-for _ in range(600):
-    time.sleep(timeStep)
-    p.stepSimulation()
+movements.sitDown(p, timeStep, maxForceId, quadruped, jointIds, jointDirections, jointOffsets)
+movements.grab(p, timeStep, maxForceId, quadruped, jointIds, jointDirections, jointOffsets)
 movements.standUp(p, timeStep, maxForceId, quadruped, jointIds, jointDirections, jointOffsets)
-
-
-########################################################################################################################
-
-t = 0
-count = 0
-while t < 5. * cycleTime:
-    # get interpolated joint
-    keyFrameDuration = mocapData.KeyFrameDuraction()
-    cycleTime = mocapData.getCycleTime()
-    cycleCount = mocapData.calcCycleCount(t, cycleTime)
-
-    # print("cycleTime=",cycleTime)
-    # print("cycleCount=",cycleCount)
-
-    # print("cycles=",cycles)
-    frameTime = t - cycleCount * cycleTime
-    # print("frameTime=",frameTime)
-    if (frameTime < 0):
-        frameTime += cycleTime
-
-    frame = int(frameTime / keyFrameDuration)
-    frameNext = frame + 1
-    if (frameNext >= mocapData.NumFrames()):
-        frameNext = frame
-    frameFraction = (frameTime - frame * keyFrameDuration) / (keyFrameDuration)
-    # print("frame=",frame)
-    # print("frameFraction=",frameFraction)
-    frameData = mocapData._motion_data['Frames'][frame]
-    frameDataNext = mocapData._motion_data['Frames'][frameNext]
-
-    jointsStr, qdot = qpi.Slerp(frameFraction, frameData, frameDataNext, p)
-
-    maxForce = p.readUserDebugParameter(maxForceId)
-    # print("jointIds=", jointIds)
-
-    maxUpForce = p.readUserDebugParameter(maxUpForceId)
-    p.changeConstraint(cid, maxForce=maxUpForce)
-    jointsStr[7] = 0
-    jointsStr[10] = 0
-    jointsStr[13] = 0
-    jointsStr[16] = 0
-    if useConstraints:
-        for j in range(12):
-            # skip the base positional dofs
-            targetPos = float(jointsStr[j + 7])
-            p.setJointMotorControl2(quadruped,
-                                    jointIds[j],
-                                    p.POSITION_CONTROL,
-                                    jointDirections[j] * targetPos + jointOffsets[j],
-                                    force=maxForce)
-        count += 1
-        if count % 42 == 0:
-            pos, ori = p.getBasePositionAndOrientation(quadruped)
-            temp = []
-            temp.append(startPos[0])
-            temp.append(pos[1])
-            temp.append(pos[2])
-            p.resetBasePositionAndOrientation(quadruped, temp, startOrn)
-
-
-    else:
-        desiredPositions = []
-        for j in range(7):
-            targetPosUnmodified = float(jointsStr[j])
-            desiredPositions.append(targetPosUnmodified)
-        for j in range(12):
-            targetPosUnmodified = float(jointsStr[j + 7])
-            targetPos = jointDirections[j] * targetPosUnmodified + jointOffsets[j]
-            desiredPositions.append(targetPos)
-        for _ in range(5):
-            desiredPositions.append(0)
-        numBaseDofs = 6
-        totalDofs = 17 + numBaseDofs
-        desiredVelocities = None
-        if desiredVelocities == None:
-            desiredVelocities = [0] * totalDofs
-        taus = stablePD.computePD(bodyUniqueId=quadruped,
-                                  jointIndices=jointIds,
-                                  desiredPositions=desiredPositions,
-                                  desiredVelocities=desiredVelocities,
-                                  kps=[4000] * totalDofs,
-                                  kds=[40] * totalDofs,
-                                  maxForces=[maxForce] * totalDofs,
-                                  timeStep=timeStep)
-
-        dofIndex = 6
-        scaling = 1
-        for index in range(len(jointIds)):
-            jointIndex = jointIds[index]
-            force = [scaling * taus[dofIndex]]
-            # print("force[", jointIndex, "]=", force)
-            p.setJointMotorControlMultiDof(quadruped,
-                                           jointIndex,
-                                           controlMode=p.TORQUE_CONTROL,
-                                           force=force)
-            dofIndex += 1
-
-
-    p.stepSimulation()
-    t += timeStep
-    time.sleep(timeStep)
-
-
-########################################################################################################################
-
-movements.halfSit(p,timeStep, maxForceId, quadruped, jointIds, jointDirections, jointOffsets)
-movements.getDown(p,timeStep, maxForceId, quadruped, jointIds, jointDirections, jointOffsets)
-movements.standUp(p,timeStep, maxForceId, quadruped, jointIds, jointDirections, jointOffsets)
-movements.backLegDown(p,timeStep, maxForceId, quadruped, jointIds, jointDirections, jointOffsets)
-
-p.setRealTimeSimulation(1)
-
-
 
 for j in range(p.getNumJoints(quadruped)):
     p.changeDynamics(quadruped, j, linearDamping=0, angularDamping=0)
@@ -266,7 +148,10 @@ for j in range(p.getNumJoints(quadruped)):
             p.addUserDebugParameter(jointName.decode("utf-8"), -4, 4,
                                     (js[0] - jointOffsets[j]) / jointDirections[j]))
 
+p.setRealTimeSimulation(1)
+
 while (1):
+
     for i in range(len(paramIds)):
         c = paramIds[i]
         targetPos = p.readUserDebugParameter(c)
