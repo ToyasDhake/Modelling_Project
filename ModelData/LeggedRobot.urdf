@@ -45,7 +45,9 @@
       <geometry>
 				<mesh filename="hip_motor_mirror.stl" scale="1 1 1"/>
       </geometry>
-       <material name="green"/>
+       <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
     </visual>
     
     <collision>
@@ -79,7 +81,9 @@
       <geometry>
 				<mesh filename="upper_leg_mirror.stl" scale="1 1 1"/>
       </geometry>
-       <material name="blue"/>
+       <material name="yellow">
+        <color rgba="0.95 0.75 0.05 1"/>
+      </material>
     </visual>
     
     <collision>
@@ -114,7 +118,9 @@
       <geometry>
 				<mesh filename="lower_leg_3.stl" scale="1 1 1"/>
       </geometry>
-       <material name="red"/>
+       <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
     </visual>
     
     <collision>
@@ -151,9 +157,10 @@
       <geometry>
 				<mesh filename="hip_motor.stl" scale="1 1 1"/>
       </geometry>
-       <material name="green">
-        <color rgba="0.23 0.73 0.33 1"/>
+       <material name="black">
+        <color rgba="0 0 0 1"/>
       </material>
+      
     </visual>
     
     <collision>
@@ -189,8 +196,8 @@
       	
 				<mesh filename="upper_leg.stl" scale="1 1 1"/>
       </geometry>
-       <material name="blue">
-        <color rgba="0.28 0.52 0.93 1"/>
+       <material name="yellow">
+        <color rgba="0.95 0.75 0.05 1"/>
       </material>
     </visual>
     
@@ -228,8 +235,8 @@
       <geometry>
 				<mesh filename="lower_leg_3.stl" scale="1 1 1"/>
       </geometry>
-       <material name="red">
-        <color rgba="0.85 0.19 0.21 1"/>
+       <material name="black">
+        <color rgba="0 0 0 1"/>
       </material>
     </visual>
     
@@ -271,7 +278,9 @@
       <geometry>
 				<mesh filename="hip_motor_mirror.stl" scale="1 1 1"/>
       </geometry>
-       <material name="green"/>
+       <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
     </visual>
     
      <collision>
@@ -306,7 +315,9 @@
       <geometry>
 				<mesh filename="upper_leg_mirror.stl" scale="1 1 1"/>
       </geometry>
-       <material name="blue"/>
+       <material name="yellow">
+        <color rgba="0.95 0.75 0.05 1"/>
+      </material>
     </visual>
     
     <collision>
@@ -341,7 +352,9 @@
       <geometry>
 				<mesh filename="lower_leg_3.stl" scale="1 1 1"/>
       </geometry>
-       <material name="red"/>
+       <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
     </visual>
     
      <collision>
@@ -377,7 +390,9 @@
       <geometry>
 				<mesh filename="hip_motor.stl" scale="1 1 1"/>
       </geometry>
-       <material name="green"/>
+       <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
     </visual>
     
     <collision>
@@ -413,7 +428,9 @@
       <geometry>
 				<mesh filename="upper_leg.stl" scale="1 1 1"/>
       </geometry>
-       <material name="blue"/>
+       <material name="yellow">
+        <color rgba="0.95 0.75 0.05 1"/>
+      </material>
     </visual>
     
     <collision>
@@ -450,7 +467,9 @@
       <geometry>
 				<mesh filename="lower_leg_3.stl" scale="1 1 1"/>
       </geometry>
-       <material name="red"/>
+       <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
     </visual>
     
     <collision>
@@ -471,7 +490,183 @@
 		<joint_properties damping=".0" friction=".0"/>
 	</joint>
 	
-	
-	
+	<link name="gripper_base">
+      <contact>
+          <lateral_friction value="1"/>
+      </contact>
+        <inertial>
+          <origin rpy="0 0 0" xyz="0 0 0"/>
+           <mass value="0.241"/>
+           <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+       <visual>
+          <origin rpy="0 0 0" xyz="-0.06 0 -0.06"/>
+          <geometry>
+                    <mesh filename="gripper_base.stl" scale="1 1 1"/>
+          </geometry>
+           <material name="black">
+            <color rgba="0 0 0 1"/>
+          </material>
+        </visual>
+        
+        <collision  >
+          <origin rpy="0 0 0" xyz="0 0 0"/>
+          <geometry>
+                    <mesh filename="gripper_base.stl" scale="1 1 1"/>
+          </geometry>
+        </collision>
+    </link>
+    
+	<joint name="chassis_gripper_base" type="continuous">
+		<axis xyz="0 1 0"/>
+		<parent link="chassis"/>
+		<child link="gripper_base"/>
+		<origin rpy="0 0 0" xyz="0 0.11 0.12"/>
+		<limit effort="100" velocity="100"/>
+		<joint_properties damping=".0" friction=".0"/>
+	</joint>
+    
+    <link name="gripper_lower_arm">
+      <contact>
+          <lateral_friction value="1"/>
+      </contact>
+        <inertial>
+          <origin rpy="0 1.57 0" xyz="0 -0.03 0"/>
+           <mass value="0.241"/>
+           <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+       <visual>
+          <origin rpy="0 1.57 0" xyz="0 -0.03 0"/>
+          <geometry>
+                    <mesh filename="gripper_lower_arm.stl" scale="1 1 1"/>
+          </geometry>
+           <material name="yellow">
+          </material>
+        </visual>
+        
+        <collision  >
+          <origin rpy="0 1.57 0" xyz="0 -0.03 0"/>
+          <geometry>
+                    <mesh filename="gripper_lower_arm.stl" scale="1 1 1"/>
+          </geometry>
+        </collision>
+    </link>
+    
+	<joint name="gripper_base_gripper_lower_arm" type="continuous">
+		<axis xyz="1 0 0"/>
+		<parent link="gripper_base"/>
+		<child link="gripper_lower_arm"/>
+		<origin rpy="0 0 0" xyz="-0.03 0.08 0"/>
+		<limit effort="100" velocity="100"/>
+		<joint_properties damping=".0" friction=".0"/>
+	</joint>
+    
+   <link name="gripper_upper_arm">
+      <contact>
+          <lateral_friction value="1"/>
+      </contact>
+        <inertial>
+          <origin rpy="0 1.57 0" xyz="0 0 0.36"/>
+           <mass value="0.241"/>
+           <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+       <visual>
+          <origin rpy="0 1.57 0" xyz="0 0 0.36"/>
+          <geometry>
+                    <mesh filename="gripper_upper_arm.stl" scale="1 1 1"/>
+          </geometry>
+           <material name="black">
+          </material>
+        </visual>
+        
+        <collision  >
+          <origin rpy="0 1.57 0" xyz="0 0 0.36"/>
+          <geometry>
+                    <mesh filename="gripper_upper_arm.stl" scale="1 1 1"/>
+          </geometry>
+        </collision>
+    </link>
+    
+	<joint name="gripper_lower_arm_gripper_upper_arm" type="continuous">
+		<axis xyz="1 0 0"/>
+		<parent link="gripper_lower_arm"/>
+		<child link="gripper_upper_arm"/>
+		<origin rpy="0 0 0" xyz="0 0 -0.33"/>
+		<limit effort="100" velocity="100"/>
+		<joint_properties damping=".0" friction=".0"/>
+	</joint>
+    
+     <link name="gripper1">
+      <contact>
+          <lateral_friction value="1"/> 
+      </contact>
+        <inertial>
+          <origin rpy="0 0 0" xyz="-0.05 -0.02 0"/>
+           <mass value="0.241"/>
+           <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+       <visual>
+          <origin rpy="0 0 0" xyz="-0.05 -0.02 0"/>
+          <geometry>
+            <!--<box size="0.1 0.02 0.1" />-->
+                    <mesh filename="Gripper1withBase.stl" scale="1 1 1"/>
+          </geometry>
+           <material name="yellow">
+          </material>
+        </visual>
+        
+        <collision  >
+          <origin rpy="0 0 0" xyz="-0.05 -0.02 0"/>
+          <geometry>
+           <!-- <box size="0.1 0.02 0.1" />-->
+                     <mesh filename="Gripper1withBase.stl" scale="1 1 1"/>
+          </geometry>
+        </collision>
+    </link>
+    
+	<joint name="gripper_upper_arm_gripper1" type="continuous">
+		<axis xyz="0 0 1"/>
+		<parent link="gripper_upper_arm"/>
+		<child link="gripper1"/>
+		<origin rpy="0 0 0" xyz="0.03 0.06 0.365"/>
+		<limit effort="100" velocity="100"/>
+		<joint_properties damping=".0" friction=".0"/>
+	</joint>
+    
+    <link name="gripper2">
+      <contact>
+          <lateral_friction value="1"/>
+      </contact>
+        <inertial>
+          <origin rpy="1.57 0 -1.57" xyz="0 0 0"/>
+           <mass value="0.241"/>
+           <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+       <visual>
+          <origin rpy="1.57 0 -1.57" xyz="0 0 0"/>
+          <geometry>
+                    <mesh filename="gripper2.stl" scale="1.3 1.3 1"/>
+          </geometry>
+           <material name="yellow">
+          </material>
+        </visual>
+        
+        <collision  >
+          <origin rpy="1.57 0 -1.57" xyz="0 0 0"/>
+          <geometry>
+                    <mesh filename="gripper2.stl" scale="1.3 1.3 1"/>
+          </geometry>
+        </collision>
+    </link>
+    
+	<joint name="gripper1_gripper2" type="continuous">
+		<axis xyz="1 0 0"/>
+		<parent link="gripper1"/>
+		<child link="gripper2"/>
+		<origin rpy="0 0 0" xyz="0.05 0.08 0.01"/>
+		<limit effort="100" velocity="100"/>
+		<joint_properties damping=".0" friction=".0"/>
+	</joint>
+    
 </robot>
 
