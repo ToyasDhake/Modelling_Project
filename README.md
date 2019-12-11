@@ -4,7 +4,16 @@
 
 ## Overview
 
-Demonstration of functioning of four legged robot for modeling project for course ENPM662 Introduction to Robot Modeling.
+Simulation of four legged robot for modeling project for course ENPM662 
+Introduction to Robot Modeling using Pybullet.
+
+Main objective of the project is to perform forward and inverse kinematics on the legs and gripper
+ of robot so that it can be used to get the legs and gripper in required orientation. Also, to 
+ decide gait of the robot to walk but mostly focus will be on trot gait.
+
+At the end robot is be able to pick and drop object, walk in straight line, climb and get down from an obstacle.
+
+
 ### Dependencies
 
 - python 3.6 
@@ -17,9 +26,15 @@ Install Anaconda, for installation step see [Link](https://docs.anaconda.com/ana
 conda create -n modeling python=3.6
 conda activate modeling
 pip install pybullet
-cd <project_directory>
+git clone https://github.com/ToyasDhake/Modelling_Project.git
+cd Modelling_Project
 python LeggedRobot.py
 ```
+### Limitaions
+
+- Robot can only walk in straight line.
+- Pace of the robot cannot be controlled.
+- Robot cannot sense its environment.
 
 ### Copyright
 
