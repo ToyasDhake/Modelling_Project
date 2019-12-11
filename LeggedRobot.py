@@ -37,8 +37,7 @@ if not useConstraints:
     for j in range(p.getNumJoints(quadruped)):
         p.setJointMotorControl2(quadruped, j, p.POSITION_CONTROL, force=0)
 
-# This cube is added as a soft constraint to keep the laikago from falling
-# since we didn't train it yet, it doesn't balance
+
 cube = p.loadURDF("cube_no_rotation.urdf", [0, 0, -0.5], [0, 0.5, 0.5, 0])
 p.setCollisionFilterGroupMask(cube, -1, 0, 0)
 for j in range(p.getNumJoints(cube)):
@@ -119,7 +118,7 @@ joints = []
 
 mocapData = motion_capture_data.MotionCaptureData()
 
-motionPath = "laikago_walk.txt"
+motionPath = "UMDSpotMiniWalk.txt"
 
 mocapData.Load(motionPath)
 print("mocapData.NumFrames=", mocapData.NumFrames())
