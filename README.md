@@ -30,6 +30,12 @@ git clone https://github.com/ToyasDhake/Modelling_Project.git
 cd Modelling_Project
 python LeggedRobot.py
 ```
+## Result
+
+![](robot.gif)
+
+Demo video [link](https://youtu.be/5Cuo5MBtMlU)
+
 ### Limitaions
 
 - Robot can only walk in straight line.
