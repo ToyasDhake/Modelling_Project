@@ -30,6 +30,10 @@ git clone https://github.com/ToyasDhake/Modelling_Project.git
 cd Modelling_Project
 python LeggedRobot.py
 ```
+### Report
+
+Calculations performed for this project can be found in [Report](Final_Project_Toyas_Dhake.pdf)
+
 ## Result
 
 ![](robot.gif)
