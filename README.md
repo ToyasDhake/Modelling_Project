@@ -1,6 +1,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/ToyasDhake/Modelling_Project/blob/master/LICENSE.txt)
 
-# Modelling_Project
+# Modelling Project
 
 ## Overview
 
