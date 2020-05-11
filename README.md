@@ -40,7 +40,7 @@ Calculations performed for this project can be found in [Report](Final_Project_T
 
 Demo video [link](https://youtu.be/5Cuo5MBtMlU)
 
-### Limitaions
+### Limitations
 
 - Robot can only walk in straight line.
 - Pace of the robot cannot be controlled.
